@@ -1,3 +1,3 @@
 ## Binary_Brigade
 
-This is the README for the project.
+###AI-Powered Real-Time Tutor & Student Support Agent for KARE

@@ -1,0 +1,344 @@
+/* Custom Styles for Learning Roadmap Generator */
+
+/* Form Styling */
+.custom-card input[type="radio"],
+.custom-card input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+}
+
+.custom-card input[type="radio"] + label,
+.custom-card input[type="checkbox"] + label {
+    cursor: pointer;
+}
+
+.custom-card input[type="radio"]:checked + label .card,
+.custom-card input[type="checkbox"]:checked + label .card {
+    border: 2px solid var(--bs-primary);
+    box-shadow: 0 0 10px rgba(var(--bs-primary-rgb), 0.5);
+}
+
+/* Topic selection visual indicator */
+.topic-checkbox:checked + label {
+    color: var(--bs-primary);
+    font-weight: 500;
+}
+
+/* Timeline styling */
+.timeline {
+    position: relative;
+    padding: 2rem;
+    margin: 0 auto;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    width: 4px;
+    background-color: var(--bs-secondary);
+    top: 0;
+    bottom: 0;
+    left: 2.5rem;
+    border-radius: 2px;
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 3.5rem;
+    margin-bottom: 2rem;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: 0;
+    width: 2rem;
+    height: 2rem;
+    background-color: var(--bs-secondary);
+    border-radius: 50%;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.timeline-marker.completed {
+    background-color: var(--bs-success);
+}
+
+.timeline-marker-icon {
+    font-size: 0.8rem;
+}
+
+.timeline-content {
+    width: 100%;
+}
+
+/* Progress Circle */
+.progress-circle {
+    position: relative;
+    width: 200px;
+    height: 200px;
+}
+
+.progress-circle-percentage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--bs-light);
+}
+
+/* Animation for progress update */
+@keyframes progressPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.progress-updated {
+    animation: progressPulse 0.5s ease;
+}
+
+/* Loading indicator animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 40px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+.fadeInUp {
+    animation: fadeInUp 0.5s ease;
+}
+
+/* Toast notifications */
+.toast {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .timeline::before {
+        left: 1.5rem;
+    }
+    
+    .timeline-item {
+        padding-left: 2.5rem;
+    }
+    
+    .timeline {
+        padding: 1rem;
+    }
+}
+
+/* Dashboard Styles */
+:root {
+    --sidebar-width: 260px;
+    --sidebar-collapsed-width: 80px;
+    --header-height: 60px;
+    --primary-color: #7952b3;
+    --secondary-color: #6c757d;
+    --dark-bg: #212529;
+    --darker-bg: #1a1d20;
+    --card-bg: #2c3034;
+    --border-color: #444;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--dark-bg);
+    color: #fff;
+    overflow-x: hidden;
+}
+
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    width: var(--sidebar-width);
+    background-color: var(--darker-bg);
+    border-right: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1000;
+}
+
+.sidebar.collapsed {
+    width: var(--sidebar-collapsed-width);
+}
+
+.sidebar-header {
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.sidebar-header h3 {
+    margin: 0;
+    font-size: 24px;
+    color: var(--primary-color);
+}
+
+.sidebar-header p {
+    margin: 5px 0 0;
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+.sidebar-menu {
+    padding: 20px 0;
+    flex-grow: 1;
+}
+
+.sidebar-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+}
+
+.sidebar-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-item.active {
+    background-color: rgba(121, 82, 179, 0.2);
+    border-left-color: var(--primary-color);
+}
+
+.sidebar-item i {
+    font-size: 18px;
+    width: 30px;
+    text-align: center;
+}
+
+.sidebar-item span {
+    margin-left: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.sidebar.collapsed .sidebar-item span,
+.sidebar.collapsed .sidebar-header p,
+.sidebar.collapsed .sidebar-footer p {
+    display: none;
+}
+
+.sidebar.collapsed .sidebar-item {
+    justify-content: center;
+    padding: 12px 10px;
+}
+
+.sidebar.collapsed .sidebar-item i {
+    font-size: 22px;
+    margin: 0;
+}
+
+.sidebar.collapsed .sidebar-header h3 {
+    font-size: 24px;
+}
+
+.sidebar-footer {
+    padding: 15px;
+    text-align: center;
+    font-size: 12px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Main Content Styles */
+.content {
+    flex: 1;
+    margin-left: var(--sidebar-width);
+    transition: all 0.3s ease;
+}
+
+.content.expanded {
+    margin-left: var(--sidebar-collapsed-width);
+}
+
+.content-header {
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    background-color: var(--darker-bg);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 900;
+}
+
+.content-header h2 {
+    margin: 0;
+    font-size: 20px;
+    flex-grow: 1;
+    margin-left: 15px;
+}
+
+.sidebar-toggle {
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 5px;
+}
+
+.user-menu {
+    display: flex;
+    align-items: center;
+}
+
+.user-menu span {
+    margin-left: 10px;
+}
+
+.content-body {
+    padding: 20px;
+}
+
+/* Feature Cards */
+.feature-card {
+    text-align: center;
+    padding: 25px 15px;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover:not(.disabled) {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.feature-card.disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.feature-card.disabled:hover {
+    transform: none;
+}

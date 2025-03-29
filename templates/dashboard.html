@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}KARE Learning Support Dashboard{% endblock %}
+
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card bg-dark text-white">
+                <div class="card-body">
+                    <h4 class="card-title">Welcome to the KARE Learning Support Dashboard</h4>
+                    <p class="card-text">Access AI-powered tools to enhance your learning experience. Choose one of the tools below to get started.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Roadmap Generator Card -->
+        <div class="col-md-4">
+            <div class="card bg-dark text-white h-100">
+                <div class="card-body">
+                    <div class="feature-card">
+                        <i class="fas fa-route fa-3x mb-3 text-primary"></i>
+                        <h5 class="card-title">Learning Roadmap Generator</h5>
+                        <p class="card-text">Create a personalized learning plan based on your interests, experience level, and available time.</p>
+                        <a href="/roadmap-generator" class="btn btn-primary mt-3">
+                            <i class="fas fa-map-signs me-2"></i>Create Roadmap
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Assistant Card -->
+        <div class="col-md-4">
+            <div class="card bg-dark text-white h-100">
+                <div class="card-body">
+                    <div class="feature-card">
+                        <i class="fas fa-robot fa-3x mb-3 text-primary"></i>
+                        <h5 class="card-title">AI Assistant Chatbot</h5>
+                        <p class="card-text">Get instant answers to your questions and receive help with difficult concepts.</p>
+                        <a href="/assistant-chatbot" class="btn btn-primary mt-3">
+                            <i class="fas fa-comments me-2"></i>Chat Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Study Tube Card -->
+        <div class="col-md-4">
+            <div class="card bg-dark text-white h-100">
+                <div class="card-body">
+                    <div class="feature-card">
+                        <i class="fas fa-video fa-3x mb-3 text-primary"></i>
+                        <h5 class="card-title">StudyTube</h5>
+                        <p class="card-text">Access curated video tutorials with AI-generated notes and summaries.</p>
+                        <a href="/study-tube" class="btn btn-primary mt-3">
+                            <i class="fas fa-play-circle me-2"></i>Watch Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col">
+            <div class="card bg-dark text-white">
+                <div class="card-header">
+                    <h5 class="mb-0">Recent Updates</h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-bullhorn me-2"></i>
+                        <strong>New Feature:</strong> AI Assistant Chatbot is now available! Get help with your questions in multiple languages.
+                    </div>
+                    <div class="alert alert-info">
+                        <i class="fas fa-bullhorn me-2"></i>
+                        <strong>New Feature:</strong> Learning Roadmap Generator is now available! Create your personalized learning plan today.
+                    </div>
+                    <div class="alert alert-info">
+                        <i class="fas fa-bullhorn me-2"></i>
+                        <strong>New Feature:</strong> StudyTube is now available! Watch programming tutorials and educational videos.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

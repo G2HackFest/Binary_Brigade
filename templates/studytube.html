@@ -1,0 +1,379 @@
+{% extends "base.html" %}
+
+{% block title %}StudyTube | KARE Learning Support{% endblock %}
+
+{% block page_title %}StudyTube{% endblock %}
+
+{% block extra_head %}
+<style>
+    .video-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+    }
+    
+    .video-card {
+        background-color: var(--card-bg);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .video-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .video-embed {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    }
+    
+    .video-embed iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+    
+    .sidebar-subjects ul, 
+    .sidebar-channels ul {
+        padding-left: 1rem;
+        list-style-type: none;
+        margin-top: 0.5rem;
+    }
+    
+    .sidebar-subjects li, 
+    .sidebar-channels li {
+        margin-bottom: 0.5rem;
+        padding: 6px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+    
+    .sidebar-subjects li:hover, 
+    .sidebar-channels li:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .loader {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100px;
+    }
+    
+    .loader-spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: var(--primary-color);
+        animation: spin 1s ease-in-out infinite;
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    .section-header {
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .search-form {
+        display: flex;
+        margin-bottom: 1.5rem;
+    }
+    
+    .search-form input {
+        flex: 1;
+        padding: 10px 16px;
+        border: 1px solid var(--gray-300);
+        border-radius: 8px 0 0 8px;
+        font-size: 1rem;
+        background-color: var(--dark-bg);
+        color: white;
+    }
+    
+    .search-form button {
+        padding: 10px 20px;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 0 8px 8px 0;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+    
+    .search-form button:hover {
+        background-color: var(--primary-dark);
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        background-color: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        margin-top: 2rem;
+    }
+    
+    .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: var(--gray-400);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card bg-dark text-white">
+                <div class="card-body">
+                    <h4>StudyTube: Learning through curated videos</h4>
+                    <p>Search for programming tutorials and educational content. Get AI-powered explanations for these videos.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- Left Sidebar for Topics and Channels -->
+        <div class="col-md-3">
+            <div class="card bg-dark text-white mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-list me-2"></i> Trending Topics
+                    </h5>
+                </div>
+                <div class="card-body sidebar-subjects">
+                    <ul>
+                        <li onclick="searchTopic('Python Programming')">
+                            <i class="fab fa-python me-2"></i> Python Programming
+                        </li>
+                        <li onclick="searchTopic('Java Programming')">
+                            <i class="fab fa-java me-2"></i> Java Programming
+                        </li>
+                        <li onclick="searchTopic('JavaScript Tutorial')">
+                            <i class="fab fa-js me-2"></i> JavaScript
+                        </li>
+                        <li onclick="searchTopic('Web Development')">
+                            <i class="fas fa-globe me-2"></i> Web Development
+                        </li>
+                        <li onclick="searchTopic('Data Science')">
+                            <i class="fas fa-chart-bar me-2"></i> Data Science
+                        </li>
+                        <li onclick="searchTopic('Machine Learning')">
+                            <i class="fas fa-brain me-2"></i> Machine Learning
+                        </li>
+                        <li onclick="searchTopic('Cyber Security')">
+                            <i class="fas fa-shield-alt me-2"></i> Cyber Security
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card bg-dark text-white">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-tv me-2"></i> Popular Channels
+                    </h5>
+                </div>
+                <div class="card-body sidebar-channels">
+                    <ul>
+                        <li onclick="searchTopic('FreeCodeCamp')">
+                            <i class="fas fa-fire me-2"></i> FreeCodeCamp
+                        </li>
+                        <li onclick="searchTopic('MIT OpenCourseWare')">
+                            <i class="fas fa-university me-2"></i> MIT OpenCourseWare
+                        </li>
+                        <li onclick="searchTopic('Programming with Mosh')">
+                            <i class="fas fa-laptop-code me-2"></i> Programming with Mosh
+                        </li>
+                        <li onclick="searchTopic('Traversy Media')">
+                            <i class="fas fa-video me-2"></i> Traversy Media
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content Area -->
+        <div class="col-md-9">
+            <!-- Search Form -->
+            <div class="card bg-dark text-white mb-4">
+                <div class="card-body">
+                    <form id="searchForm" class="search-form">
+                        <input type="text" id="searchInput" placeholder="Search for programming tutorials..." 
+                               class="form-control" required>
+                        <button type="submit">
+                            <i class="fas fa-search me-2"></i> Search
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Loading Indicator (initially hidden) -->
+            <div id="loader" class="loader" style="display: none;">
+                <div class="loader-spinner"></div>
+            </div>
+            
+            <!-- Results Section -->
+            <div id="resultsSection">
+                <div class="section-header">
+                    <h5 id="resultsTitle">Trending Videos</h5>
+                </div>
+                
+                {% if videos %}
+                <div id="videoGrid" class="video-grid">
+                    {% for video in videos %}
+                    <div class="video-card">
+                        <div class="video-embed">
+                            <iframe src="{{ video }}" title="YouTube video player" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div id="emptyState" class="empty-state">
+                    <i class="fas fa-search"></i>
+                    <h5>Search for programming tutorials</h5>
+                    <p>Try searching for a programming language or topic to see educational videos</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Function to search for YouTube videos
+    function searchVideos(query) {
+        // Show loader
+        document.getElementById('loader').style.display = 'flex';
+        document.getElementById('resultsSection').style.display = 'none';
+        
+        // Fetch videos from the backend
+        fetch('/study-tube/search?query=' + encodeURIComponent(query))
+            .then(response => response.json())
+            .then(data => {
+                // Hide loader
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('resultsSection').style.display = 'block';
+                
+                // Update results title
+                document.getElementById('resultsTitle').innerText = 'Search Results for "' + query + '"';
+                
+                // Clear previous results
+                const videoGrid = document.getElementById('videoGrid');
+                if (!videoGrid) {
+                    // Create video grid if it doesn't exist
+                    const resultsSection = document.getElementById('resultsSection');
+                    const newVideoGrid = document.createElement('div');
+                    newVideoGrid.id = 'videoGrid';
+                    newVideoGrid.className = 'video-grid';
+                    resultsSection.appendChild(newVideoGrid);
+                    
+                    // Remove empty state if it exists
+                    const emptyState = document.getElementById('emptyState');
+                    if (emptyState) {
+                        emptyState.remove();
+                    }
+                } else {
+                    videoGrid.innerHTML = '';
+                }
+                
+                // Add new videos
+                if (data.videos && data.videos.length > 0) {
+                    data.videos.forEach(video => {
+                        const videoCard = document.createElement('div');
+                        videoCard.className = 'video-card';
+                        
+                        const videoEmbed = document.createElement('div');
+                        videoEmbed.className = 'video-embed';
+                        
+                        const iframe = document.createElement('iframe');
+                        iframe.src = video;
+                        iframe.title = 'YouTube video player';
+                        iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+                        iframe.setAttribute('allowfullscreen', '');
+                        
+                        videoEmbed.appendChild(iframe);
+                        videoCard.appendChild(videoEmbed);
+                        videoGrid.appendChild(videoCard);
+                    });
+                } else if (data.error) {
+                    // Show error message
+                    const errorMsg = document.createElement('div');
+                    errorMsg.className = 'alert alert-danger';
+                    errorMsg.textContent = data.error || 'Error loading videos. Please try again later.';
+                    document.getElementById('resultsSection').innerHTML = '';
+                    document.getElementById('resultsSection').appendChild(errorMsg);
+                } else {
+                    // Show no results message
+                    const noResults = document.createElement('div');
+                    noResults.className = 'empty-state';
+                    noResults.innerHTML = `
+                        <i class="fas fa-exclamation-circle"></i>
+                        <h5>No videos found</h5>
+                        <p>Try a different search term or topic</p>
+                    `;
+                    document.getElementById('resultsSection').innerHTML = '';
+                    document.getElementById('resultsSection').appendChild(noResults);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching videos:', error);
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('resultsSection').style.display = 'block';
+                
+                // Show error message
+                const errorMsg = document.createElement('div');
+                errorMsg.className = 'alert alert-danger';
+                errorMsg.textContent = 'Error loading videos. Please try again later.';
+                document.getElementById('resultsSection').appendChild(errorMsg);
+            });
+    }
+    
+    // Function to search for a specific topic when clicked
+    function searchTopic(topic) {
+        document.getElementById('searchInput').value = topic;
+        searchVideos(topic);
+    }
+    
+    // Initialize form event listener
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchForm = document.getElementById('searchForm');
+        
+        searchForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const query = document.getElementById('searchInput').value.trim();
+            
+            if (query) {
+                searchVideos(query);
+            }
+        });
+        
+        // Load initial trending videos (Python as default)
+        {% if not videos %}
+        searchTopic('Python Programming');
+        {% endif %}
+    });
+</script>
+{% endblock %}

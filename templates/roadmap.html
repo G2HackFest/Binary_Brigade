@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+
+{% block title %}{{ roadmap.title }} | KARE Learning Support{% endblock %}
+
+{% block page_title %}Learning Roadmap{% endblock %}
+
+{% block content %}
+<div class="container-fluid" id="roadmapContainer">
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card bg-dark text-white">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 id="roadmapTitle">{{ roadmap.title }}</h4>
+                        <p class="text-white-50 mb-0">
+                            <span class="badge bg-primary me-2">{{ roadmap.experience_level }}</span>
+                            <span class="badge bg-secondary me-2">{{ roadmap.timeframe }}</span>
+                            {% for topic in roadmap.topics %}
+                            <span class="badge bg-info me-1">{{ topic }}</span>
+                            {% endfor %}
+                        </p>
+                    </div>
+                    <div>
+                        <button id="downloadPdfBtn" class="btn btn-outline-light no-print">
+                            <i class="fas fa-download me-2"></i>Download PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Progress Overview -->
+        <div class="col-md-4 mb-4">
+            <div class="card bg-dark text-white">
+                <div class="card-header">
+                    <h5 class="mb-0">Your Progress</h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        <div class="progress-circle mx-auto mb-3">
+                            <canvas id="progressChart" width="200" height="200"></canvas>
+                            <div class="progress-circle-percentage" id="progressPercentage">0%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="progress mb-3" style="height: 10px;">
+                        <div id="progressBar" class="progress-bar bg-success" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    
+                    <p class="text-center mb-0" id="progressText">0% Complete</p>
+                </div>
+                
+                <div class="card-footer bg-dark">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <small class="text-white-50">Started: {{ roadmap.get('created_at', 'Today') }}</small>
+                        </div>
+                        <div>
+                            <a href="/roadmap-generator" class="btn btn-sm btn-outline-light no-print">
+                                <i class="fas fa-edit me-1"></i>New Roadmap
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Roadmap Description -->
+            <div class="card bg-dark text-white mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">About This Roadmap</h5>
+                </div>
+                <div class="card-body">
+                    <p>{{ roadmap.description }}</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Roadmap Timeline -->
+        <div class="col-md-8 mb-4" id="roadmapContent">
+            <div class="card bg-dark text-white">
+                <div class="card-header">
+                    <h5 class="mb-0">Learning Milestones</h5>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        {% for milestone in roadmap.milestones %}
+                        <div class="timeline-item" data-milestone-id="{{ milestone.id }}">
+                            <div class="timeline-marker {% if milestone.completed %}completed{% endif %}">
+                                <i class="{% if milestone.completed %}fas fa-check{% else %}fas fa-circle{% endif %} timeline-marker-icon"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <div class="card bg-dark border-secondary mb-3">
+                                    <div class="card-header d-flex justify-content-between">
+                                        <h5 class="milestone-title mb-0 {% if milestone.completed %}text-decoration-line-through{% endif %}">{{ milestone.title }}</h5>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input milestone-checkbox" type="checkbox" role="switch" 
+                                                   data-milestone-id="{{ milestone.id }}" 
+                                                   id="milestone{{ milestone.id }}" 
+                                                   {% if milestone.completed %}checked{% endif %}>
+                                            <label class="form-check-label" for="milestone{{ milestone.id }}">Complete</label>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="card-text">{{ milestone.description }}</p>
+                                        <p class="text-white-50"><i class="fas fa-clock me-2"></i>Estimated time: {{ milestone.estimated_time }}</p>
+                                        
+                                        <h6 class="mb-3">Recommended Resources:</h6>
+                                        <div class="list-group list-group-flush bg-dark">
+                                            {% for resource in milestone.resources %}
+                                            <a href="{{ resource.url }}" target="_blank" class="list-group-item list-group-item-action bg-dark text-white border-secondary">
+                                                <div class="d-flex w-100 justify-content-between">
+                                                    <h6 class="mb-1">{{ resource.title }}</h6>
+                                                    <small class="text-white-50">
+                                                        {% if resource.type == 'video' %}
+                                                            <i class="fas fa-video"></i>
+                                                        {% elif resource.type == 'article' %}
+                                                            <i class="fas fa-file-alt"></i>
+                                                        {% elif resource.type == 'course' %}
+                                                            <i class="fas fa-graduation-cap"></i>
+                                                        {% elif resource.type == 'book' %}
+                                                            <i class="fas fa-book"></i>
+                                                        {% elif resource.type == 'tutorial' %}
+                                                            <i class="fas fa-code"></i>
+                                                        {% else %}
+                                                            <i class="fas fa-link"></i>
+                                                        {% endif %}
+                                                        {{ resource.type|title }}
+                                                    </small>
+                                                </div>
+                                                <p class="mb-1">{{ resource.description }}</p>
+                                            </a>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Conclusion -->
+            <div class="card bg-dark text-white mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Next Steps</h5>
+                </div>
+                <div class="card-body">
+                    <p>{{ roadmap.conclusion }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Progress tracking and chart visualization -->
+<script src="{{ url_for('static', filename='js/chart-utils.js') }}"></script>
+<script src="{{ url_for('static', filename='js/progress-tracker.js') }}"></script>
+<script src="{{ url_for('static', filename='js/pdf-generator.js') }}"></script>
+{% endblock %}

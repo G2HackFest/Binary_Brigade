@@ -1,0 +1,341 @@
+{% extends "base.html" %}
+
+{% block title %}Generate Learning Roadmap | KARE Learning Support{% endblock %}
+
+{% block page_title %}Learning Roadmap Generator{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card bg-dark text-white">
+                <div class="card-body">
+                    <h4>Create Your Personalized Learning Roadmap</h4>
+                    <p>Tell us about your experience level, topics of interest, and available time to generate a custom learning path.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error message display -->
+    <div class="alert alert-danger d-none" id="errorMessage" role="alert"></div>
+
+    <!-- Loading Indicator (initially hidden) -->
+    <div class="d-none" id="loadingIndicator">
+        <div class="text-center p-5 fadeInUp">
+            <div class="spinner-border text-primary mb-4" style="width: 3rem; height: 3rem;" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <h5 class="text-white">Generating your personalized roadmap...</h5>
+            <p class="text-white-50">This may take up to 30 seconds. We're crafting a detailed learning plan just for you.</p>
+        </div>
+    </div>
+
+    <!-- Roadmap Generator Form -->
+    <form id="roadmapForm" class="mb-4">
+        <div class="row g-4">
+            <!-- Experience Level Selection -->
+            <div class="col-md-4">
+                <div class="card bg-dark text-white h-100">
+                    <div class="card-header">
+                        <h5 class="mb-0">1. Your Experience Level</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text mb-4">Select your current knowledge level for the topics you want to learn.</p>
+                        
+                        <div class="row g-3 custom-card">
+                            <!-- Beginner Option -->
+                            <div class="col-12">
+                                <input type="radio" name="experienceLevel" id="beginner" value="Beginner" checked>
+                                <label for="beginner" class="w-100">
+                                    <div class="card bg-dark text-white border-light">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-seedling fa-2x text-success me-3"></i>
+                                                <div>
+                                                    <h6 class="mb-0">Beginner</h6>
+                                                    <small class="text-white-50">New to the subject</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                            
+                            <!-- Intermediate Option -->
+                            <div class="col-12">
+                                <input type="radio" name="experienceLevel" id="intermediate" value="Intermediate">
+                                <label for="intermediate" class="w-100">
+                                    <div class="card bg-dark text-white border-light">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-tree fa-2x text-info me-3"></i>
+                                                <div>
+                                                    <h6 class="mb-0">Intermediate</h6>
+                                                    <small class="text-white-50">Some knowledge</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                            
+                            <!-- Advanced Option -->
+                            <div class="col-12">
+                                <input type="radio" name="experienceLevel" id="advanced" value="Advanced">
+                                <label for="advanced" class="w-100">
+                                    <div class="card bg-dark text-white border-light">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-mountain fa-2x text-warning me-3"></i>
+                                                <div>
+                                                    <h6 class="mb-0">Advanced</h6>
+                                                    <small class="text-white-50">Proficient, seeking mastery</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Topics Selection -->
+            <div class="col-md-4">
+                <div class="card bg-dark text-white h-100">
+                    <div class="card-header">
+                        <h5 class="mb-0">2. Topics of Interest</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text mb-3">Select up to 3 topics you want to learn.</p>
+                        
+                        <div class="row g-2">
+                            <!-- Programming Languages -->
+                            <div class="col-12">
+                                <h6 class="border-bottom pb-2">Programming Languages</h6>
+                            </div>
+                            
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input topic-checkbox" type="checkbox" value="Python" id="python">
+                                    <label class="form-check-label" for="python">Python</label>
+                                </div>
+                            </div>
+                            
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input topic-checkbox" type="checkbox" value="JavaScript" id="javascript">
+                                    <label class="form-check-label" for="javascript">JavaScript</label>
+                                </div>
+                            </div>
+                            
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input topic-checkbox" type="checkbox" value="Java" id="java">
+                                    <label class="form-check-label" for="java">Java</label>
+                                </div>
+                            </div>
+                            
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input topic-checkbox" type="checkbox" value="C++" id="cpp">
+                                    <label class="form-check-label" for="cpp">C++</label>
+                                </div>
+                            </div>
+                            
+                            <!-- Web Development -->
+                            <div class="col-12 mt-3">
+                                <h6 class="border-bottom pb-2">Web Development</h6>
+                            </div>
+                            
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input topic-checkbox" type="checkbox" value="HTML & CSS" id="htmlcss">
+                                    <label class="form-check-label" for="htmlcss">HTML & CSS</label>
+                                </div>
+                            </div>
+                            
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input topic-checkbox" type="checkbox" value="React" id="react">
+                                    <label class="form-check-label" for="react">React</label>
+                                </div>
+                            </div>
+                            
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input topic-checkbox" type="checkbox" value="Node.js" id="nodejs">
+                                    <label class="form-check-label" for="nodejs">Node.js</label>
+                                </div>
+                            </div>
+                            
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input topic-checkbox" type="checkbox" value="Angular" id="angular">
+                                    <label class="form-check-label" for="angular">Angular</label>
+                                </div>
+                            </div>
+                            
+                            <!-- Data Science -->
+                            <div class="col-12 mt-3">
+                                <h6 class="border-bottom pb-2">Data Science</h6>
+                            </div>
+                            
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input topic-checkbox" type="checkbox" value="Machine Learning" id="ml">
+                                    <label class="form-check-label" for="ml">Machine Learning</label>
+                                </div>
+                            </div>
+                            
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input topic-checkbox" type="checkbox" value="Data Analysis" id="dataanalysis">
+                                    <label class="form-check-label" for="dataanalysis">Data Analysis</label>
+                                </div>
+                            </div>
+                            
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input topic-checkbox" type="checkbox" value="Deep Learning" id="deeplearning">
+                                    <label class="form-check-label" for="deeplearning">Deep Learning</label>
+                                </div>
+                            </div>
+                            
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input topic-checkbox" type="checkbox" value="Computer Vision" id="cv">
+                                    <label class="form-check-label" for="cv">Computer Vision</label>
+                                </div>
+                            </div>
+                            
+                            <!-- Other Topics -->
+                            <div class="col-12 mt-3">
+                                <h6 class="border-bottom pb-2">Other Topics</h6>
+                            </div>
+                            
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input topic-checkbox" type="checkbox" value="Cybersecurity" id="cybersecurity">
+                                    <label class="form-check-label" for="cybersecurity">Cybersecurity</label>
+                                </div>
+                            </div>
+                            
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input topic-checkbox" type="checkbox" value="Mobile Development" id="mobile">
+                                    <label class="form-check-label" for="mobile">Mobile Dev</label>
+                                </div>
+                            </div>
+                            
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input topic-checkbox" type="checkbox" value="Cloud Computing" id="cloud">
+                                    <label class="form-check-label" for="cloud">Cloud Computing</label>
+                                </div>
+                            </div>
+                            
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input topic-checkbox" type="checkbox" value="DevOps" id="devops">
+                                    <label class="form-check-label" for="devops">DevOps</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Timeframe Selection -->
+            <div class="col-md-4">
+                <div class="card bg-dark text-white h-100">
+                    <div class="card-header">
+                        <h5 class="mb-0">3. Available Time</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text mb-4">How much time do you have to complete this learning path?</p>
+                        
+                        <div class="row g-3 custom-card">
+                            <!-- 1 Month Option -->
+                            <div class="col-12">
+                                <input type="radio" name="timeframe" id="1month" value="1 Month" checked>
+                                <label for="1month" class="w-100">
+                                    <div class="card bg-dark text-white border-light">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-hourglass-start fa-2x text-primary me-3"></i>
+                                                <div>
+                                                    <h6 class="mb-0">1 Month</h6>
+                                                    <small class="text-white-50">Quick learning path</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                            
+                            <!-- 3 Months Option -->
+                            <div class="col-12">
+                                <input type="radio" name="timeframe" id="3months" value="3 Months">
+                                <label for="3months" class="w-100">
+                                    <div class="card bg-dark text-white border-light">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-hourglass-half fa-2x text-info me-3"></i>
+                                                <div>
+                                                    <h6 class="mb-0">3 Months</h6>
+                                                    <small class="text-white-50">Balanced learning path</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                            
+                            <!-- 6 Months Option -->
+                            <div class="col-12">
+                                <input type="radio" name="timeframe" id="6months" value="6 Months">
+                                <label for="6months" class="w-100">
+                                    <div class="card bg-dark text-white border-light">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-hourglass-end fa-2x text-warning me-3"></i>
+                                                <div>
+                                                    <h6 class="mb-0">6 Months</h6>
+                                                    <small class="text-white-50">Comprehensive learning</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Submit Button -->
+        <div class="row mt-4">
+            <div class="col d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="fas fa-magic me-2"></i>Generate My Learning Roadmap
+                </button>
+            </div>
+        </div>
+    </form>
+    
+    {% if error %}
+    <div class="alert alert-danger">
+        {{ error }}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Form validation and submission -->
+<script src="{{ url_for('static', filename='js/form-validation.js') }}"></script>
+{% endblock %}
